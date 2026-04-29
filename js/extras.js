@@ -1,3 +1,4 @@
+
 function openPanel(type) {
   const overlay = document.getElementById("extras-panel");
   const title = document.getElementById("panel-title");
@@ -11,12 +12,27 @@ function openPanel(type) {
     title.textContent = "App Cloaking";
 
     body.innerHTML = `
-      <p>Select an app style. Re-add to home screen after saving.</p>
+      <p>Select an app icon style.</p>
 
-      <button class="panel-btn" onclick="setCloak('classroom')">Google Classroom</button>
-      <button class="panel-btn" onclick="setCloak('docs')">Google Docs</button>
-      <button class="panel-btn" onclick="setCloak('slides')">Google Slides</button>
-      <button class="panel-btn" onclick="setCloak('drive')">Google Drive</button>
+      <div class="cloak-grid">
+        <div class="cloak-option" onclick="setCloak('classroom')">
+          <img src="/images/classroom.png">
+        </div>
+
+        <div class="cloak-option" onclick="setCloak('docs')">
+          <img src="/images/docs.png">
+        </div>
+
+        <div class="cloak-option" onclick="setCloak('slides')">
+          <img src="/images/slides.png">
+        </div>
+
+        <div class="cloak-option" onclick="setCloak('drive')">
+          <img src="/images/drive.png">
+        </div>
+      </div>
+
+      <button class="panel-reset" onclick="resetCloak()">Reset</button>
     `;
   }
 
@@ -25,8 +41,7 @@ function openPanel(type) {
     title.textContent = "Links";
 
     body.innerHTML = `
-      <button class="panel-btn" onclick="window.open('https://google.com')">Google</button>
-      <button class="panel-btn">Add more links later</button>
+      <button class="panel-btn">Add link here</button>
     `;
   }
 
@@ -36,12 +51,12 @@ function openPanel(type) {
 
     body.innerHTML = `
       <p>v1.0 - Initial release</p>
-      <p>v1.1 - Cloaking added</p>
-      <p>v1.2 - Extras system created</p>
+      <p>v1.1 - Cloaking system</p>
+      <p>v1.2 - Extras panel added</p>
     `;
   }
 
-  /* ===== CODE PANEL ===== */
+  /* ===== CODE ===== */
   if (type === "code") {
     title.textContent = "Code Panel";
 
@@ -56,7 +71,8 @@ function closePanel() {
   document.getElementById("extras-panel").classList.remove("show");
 }
 
-/* ===== CLOAK SAVE ===== */
+/* ===== CLOAK ===== */
+
 function setCloak(type) {
   let name = "The Carey Network";
   let icon = "/images/icon.png";
@@ -84,10 +100,28 @@ function setCloak(type) {
   localStorage.setItem("appName", name);
   localStorage.setItem("appIcon", icon);
 
-  alert("Saved! Re-add to home screen.");
+  document.title = name;
+
+  let link = document.querySelector("link[rel~='icon']");
+  if (link) link.href = icon;
+
+  alert("Saved. Re-add to home screen.");
+}
+
+function resetCloak() {
+  localStorage.removeItem("appName");
+  localStorage.removeItem("appIcon");
+
+  document.title = "The Carey Network";
+
+  let link = document.querySelector("link[rel~='icon']");
+  if (link) link.href = "/images/icon.png";
+
+  alert("Reset complete.");
 }
 
 /* ===== CODE ===== */
+
 function submitCode() {
   const val = document.getElementById("codeInput").value;
   alert("Code: " + val);
