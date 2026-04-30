@@ -1,54 +1,56 @@
+// ─── Restore cloak on load ───────────────────────────────────────
+(function () {
+  const name = localStorage.getItem("appName");
+  const icon = localStorage.getItem("appIcon");
+  if (name) document.title = name;
+  if (icon) applyIconLinks(icon);
+})();
 
+// ─── Panel open / close ──────────────────────────────────────────
 function openPanel(type) {
+  document.body.style.overflow = "hidden";
+
   const overlay = document.getElementById("extras-panel");
-  const title = document.getElementById("panel-title");
-  const body = document.getElementById("panel-body");
+  const title   = document.getElementById("panel-title");
+  const body    = document.getElementById("panel-body");
+
+  if (!overlay || !title || !body) return;
 
   overlay.classList.add("show");
   body.innerHTML = "";
 
-  /* ===== CLOAK ===== */
   if (type === "cloak") {
     title.textContent = "App Cloaking";
-
     body.innerHTML = `
-      <p>Select an app icon style.</p>
-
+      <p id="cloak-status" class="cloak-status"></p>
+      <p class="panel-hint">Select an app icon style.</p>
       <div class="cloak-grid">
         <div class="cloak-option" onclick="setCloak('classroom')">
-          <img src="/images/classroom.png">
+          <img src="/images/classroom.png" /><span>Classroom</span>
         </div>
-
         <div class="cloak-option" onclick="setCloak('docs')">
-          <img src="/images/docs.png">
+          <img src="/images/docs.png" /><span>Docs</span>
         </div>
-
         <div class="cloak-option" onclick="setCloak('slides')">
-          <img src="/images/slides.png">
+          <img src="/images/slides.png" /><span>Slides</span>
         </div>
-
         <div class="cloak-option" onclick="setCloak('drive')">
-          <img src="/images/drive.png">
+          <img src="/images/drive.png" /><span>Drive</span>
         </div>
       </div>
-
       <button class="panel-reset" onclick="resetCloak()">Reset</button>
     `;
+    const active = localStorage.getItem("appName");
+    if (active) showCloakStatus(`Active: ${active}`);
   }
 
-  /* ===== LINKS ===== */
   if (type === "links") {
     title.textContent = "Links";
-
-    body.innerHTML = `
-      <button class="panel-btn">Add link here</button>
-    `;
+    body.innerHTML = `<button class="panel-btn">Add link here</button>`;
   }
 
-  /* ===== CHANGELOG ===== */
   if (type === "changelog") {
     title.textContent = "Changelog";
-
     body.innerHTML = `
       <p>v1.0 - Initial release</p>
       <p>v1.1 - Cloaking system</p>
@@ -56,73 +58,126 @@ function openPanel(type) {
     `;
   }
 
-  /* ===== CODE ===== */
   if (type === "code") {
     title.textContent = "Code Panel";
-
     body.innerHTML = `
-      <input class="panel-input" id="codeInput" placeholder="Enter code...">
+      <input class="panel-input" id="codeInput" placeholder="Enter code…" />
       <button class="panel-btn" onclick="submitCode()">Submit</button>
+      <pre id="codeOutput" class="code-output"></pre>
     `;
   }
 }
 
 function closePanel() {
-  document.getElementById("extras-panel").classList.remove("show");
+  document.body.style.overflow = "";
+  const overlay = document.getElementById("extras-panel");
+  if (overlay) overlay.classList.remove("show");
 }
 
-/* ===== CLOAK ===== */
+document.addEventListener("click", function (e) {
+  const overlay = document.getElementById("extras-panel");
+  if (overlay && e.target === overlay) closePanel();
+});
+
+// ─── Status UI ───────────────────────────────────────────────────
+function showCloakStatus(msg, color = "#e65c00") {
+  const el = document.getElementById("cloak-status");
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = color;
+}
+
+// ─── Apply icon + manifest ────────────────────────────────────────
+function applyIconLinks(iconUrl) {
+  let favicon = document.querySelector("link[rel~='icon']");
+  if (!favicon) {
+    favicon = document.createElement("link");
+    favicon.rel = "icon";
+    document.head.appendChild(favicon);
+  }
+  favicon.href = iconUrl;
+
+  let apple = document.querySelector("link[rel='apple-touch-icon']");
+  if (!apple) {
+    apple = document.createElement("link");
+    apple.rel = "apple-touch-icon";
+    document.head.appendChild(apple);
+  }
+  apple.href = iconUrl;
+
+  injectManifest(document.title || "The Carey Network", iconUrl);
+}
+
+// ─── Manifest injection ───────────────────────────────────────────
+let manifestURL = null;
+
+function injectManifest(appName, iconUrl) {
+  const manifest = {
+    name: appName,
+    short_name: appName,
+    start_url: "/",
+    display: "standalone",
+    background_color: "#111111",
+    theme_color: "#e65c00",
+    icons: [
+      { src: iconUrl, sizes: "192x192", type: "image/png" },
+      { src: iconUrl, sizes: "512x512", type: "image/png" }
+    ]
+  };
+
+  const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+  const url  = URL.createObjectURL(blob);
+
+  const link = document.querySelector("link[rel='manifest']")
+             || document.createElement("link");
+  link.rel  = "manifest";
+  link.href = url;
+  if (!link.parentNode) document.head.appendChild(link);
+
+  if (manifestURL) URL.revokeObjectURL(manifestURL);
+  manifestURL = url;
+}
+
+// ─── Cloak system ────────────────────────────────────────────────
+const CLOAKS = {
+  classroom: { name: "Google Classroom", icon: "/images/classroom.png" },
+  docs:      { name: "Google Docs",      icon: "/images/docs.png"      },
+  slides:    { name: "Google Slides",    icon: "/images/slides.png"    },
+  drive:     { name: "Google Drive",     icon: "/images/drive.png"     }
+};
 
 function setCloak(type) {
-  let name = "The Carey Network";
-  let icon = "/images/icon.png";
-
-  if (type === "classroom") {
-    name = "Google Classroom";
-    icon = "/images/classroom.png";
-  }
-
-  if (type === "docs") {
-    name = "Google Docs";
-    icon = "/images/docs.png";
-  }
-
-  if (type === "slides") {
-    name = "Google Slides";
-    icon = "/images/slides.png";
-  }
-
-  if (type === "drive") {
-    name = "Google Drive";
-    icon = "/images/drive.png";
-  }
-
-  localStorage.setItem("appName", name);
-  localStorage.setItem("appIcon", icon);
-
-  document.title = name;
-
-  let link = document.querySelector("link[rel~='icon']");
-  if (link) link.href = icon;
-
-  alert("Saved. Re-add to home screen.");
+  const p = CLOAKS[type];
+  if (!p) return;
+  document.title = p.name;
+  applyIconLinks(p.icon);
+  localStorage.setItem("appName", p.name);
+  localStorage.setItem("appIcon", p.icon);
+  showCloakStatus(`✓ Cloaked as ${p.name}`);
 }
 
 function resetCloak() {
+  const name = "The Carey Network";
+  const icon = "/images/icon.png";
+  document.title = name;
+  applyIconLinks(icon);
   localStorage.removeItem("appName");
   localStorage.removeItem("appIcon");
-
-  document.title = "The Carey Network";
-
-  let link = document.querySelector("link[rel~='icon']");
-  if (link) link.href = "/images/icon.png";
-
-  alert("Reset complete.");
+  showCloakStatus("✓ Reset to default", "#aaa");
 }
 
-/* ===== CODE ===== */
-
+// ─── Code panel ───────────────────────────────────────────────────
 function submitCode() {
-  const val = document.getElementById("codeInput").value;
-  alert("Code: " + val);
+  const input = document.getElementById("codeInput");
+  const out   = document.getElementById("codeOutput");
+  if (!input || !out) return;
+  const val = input.value.trim();
+  try {
+    const result = Function('"use strict"; return (' + val + ')')();
+    out.textContent = String(result);
+    out.style.color = "#7fff7f";
+  } catch (err) {
+    out.textContent = "✗ " + err.message;
+    out.style.color = "#ff6b6b";
+  }
 }
