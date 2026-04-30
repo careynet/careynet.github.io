@@ -1,3 +1,22 @@
+// ─── Scroll lock helpers (iOS Safari safe) ───────────────────────
+let _scrollY = 0;
+
+function lockScroll() {
+  _scrollY = window.scrollY;
+  document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.top      = `-${_scrollY}px`;
+  document.body.style.width    = "100%";
+}
+
+function unlockScroll() {
+  document.body.style.overflow = "";
+  document.body.style.position = "";
+  document.body.style.top      = "";
+  document.body.style.width    = "";
+  window.scrollTo(0, _scrollY);
+}
+
 // ─── Restore cloak on load ───────────────────────────────────────
 (function () {
   const name = localStorage.getItem("appName");
@@ -8,12 +27,11 @@
 
 // ─── Panel open / close ──────────────────────────────────────────
 function openPanel(type) {
-  document.body.style.overflow = "hidden";
+  lockScroll();
 
   const overlay = document.getElementById("extras-panel");
   const title   = document.getElementById("panel-title");
   const body    = document.getElementById("panel-body");
-
   if (!overlay || !title || !body) return;
 
   overlay.classList.add("show");
@@ -69,7 +87,7 @@ function openPanel(type) {
 }
 
 function closePanel() {
-  document.body.style.overflow = "";
+  unlockScroll();
   const overlay = document.getElementById("extras-panel");
   if (overlay) overlay.classList.remove("show");
 }
