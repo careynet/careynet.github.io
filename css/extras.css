@@ -1,6 +1,4 @@
-
-/* ===== SETTINGS BASE (reuse your system) ===== */
-
+/* ===== SETTINGS MENU GRID ===== */
 .settings-menu {
   background: rgba(0,0,0,0.5);
   backdrop-filter: blur(12px);
@@ -15,6 +13,7 @@
   box-shadow: 0 0 20px rgba(230,92,0,0.3);
 }
 
+/* ===== SETTING CARDS — match settings page exactly ===== */
 .setting-card {
   background: rgba(17,17,17,0.75);
   border-radius: 18px;
@@ -27,6 +26,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 14px;
   transition: 0.25s ease;
 }
 
@@ -36,25 +36,35 @@
   box-shadow: 0 0 12px #e65c00, 0 0 25px rgba(230,92,0,0.5);
 }
 
+/* h3 subheader — matches settings page style */
+.setting-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+/* button — matches .setting-card:first-child button in style.css */
 .setting-card button {
-  padding: 14px 28px;
-  border: none;
-  border-radius: 14px;
   background: #e65c00;
   color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 0 12px #e65c00;
-  transition: 0.2s;
+  box-shadow: 0 0 10px #e65c00, 0 0 20px rgba(230,92,0,0.6);
+  transition: all 0.25s ease;
 }
 
 .setting-card button:hover {
+  background: #ff6a00;
+  box-shadow: 0 0 20px #fff, 0 0 40px rgba(255,255,255,0.8);
   transform: scale(1.05);
-  box-shadow: 0 0 20px #fff, 0 0 40px #e65c00;
 }
 
-/* ===== PANEL ===== */
-
+/* ===== PANEL OVERLAY ===== */
 .extras-overlay {
   position: fixed;
   inset: 0;
@@ -104,10 +114,11 @@
 .extras-body {
   margin-top: 15px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 /* ===== CLOAK GRID ===== */
-
 .cloak-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -119,12 +130,14 @@
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(230,92,0,0.25);
   border-radius: 16px;
-  padding: 12px;
+  padding: 16px 12px;
   cursor: pointer;
   transition: 0.25s;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 8px;
 }
 
 .cloak-option:hover {
@@ -139,8 +152,26 @@
   border-radius: 10px;
 }
 
-/* ===== INPUT ===== */
+.cloak-option span {
+  font-size: 0.78rem;
+  color: #aaa;
+}
 
+/* ===== STATUS + HINT ===== */
+.cloak-status {
+  font-size: 0.82rem;
+  min-height: 1.2em;
+  margin-bottom: 6px;
+  transition: color 0.2s;
+}
+
+.panel-hint {
+  font-size: 0.86rem;
+  color: #aaa;
+  margin-bottom: 4px;
+}
+
+/* ===== INPUTS ===== */
 .panel-input {
   width: 100%;
   padding: 14px;
@@ -159,8 +190,7 @@
   box-shadow: 0 0 12px rgba(230,92,0,0.4);
 }
 
-/* ===== BUTTONS ===== */
-
+/* ===== PANEL BUTTONS ===== */
 .panel-btn {
   width: 100%;
   padding: 14px;
@@ -172,6 +202,13 @@
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 0 10px #e65c00;
+  transition: 0.25s;
+}
+
+.panel-btn:hover {
+  background: #ff6a00;
+  box-shadow: 0 0 20px #fff, 0 0 40px rgba(255,255,255,0.8);
+  transform: scale(1.02);
 }
 
 .panel-reset {
@@ -183,9 +220,34 @@
   background: rgba(255,255,255,0.03);
   color: #aaa;
   cursor: pointer;
+  transition: 0.25s;
 }
 
 .panel-reset:hover {
   color: #fff;
   border-color: #e65c00;
+}
+
+/* ===== CODE OUTPUT ===== */
+.code-output {
+  margin-top: 10px;
+  background: rgba(255,255,255,0.04);
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  min-height: 36px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .settings-menu {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .cloak-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
