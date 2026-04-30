@@ -230,6 +230,7 @@
 
 /* ===== CODE OUTPUT ===== */
 .code-output {
+  display: none;
   margin-top: 10px;
   background: rgba(255,255,255,0.04);
   padding: 14px;
@@ -237,7 +238,10 @@
   font-size: 0.82rem;
   white-space: pre-wrap;
   word-break: break-all;
-  min-height: 36px;
+}
+
+.code-output:not(:empty) {
+  display: block;
 }
 
 /* ===== RESPONSIVE ===== */
