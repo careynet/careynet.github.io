@@ -14,7 +14,6 @@
 <link rel="manifest" href="/manifest.json">
 
 <link rel="stylesheet" href="../css/style.css" />
-<link rel="stylesheet" href="../css/extras.css" />
 </head>
 
 <body>
@@ -26,26 +25,32 @@
 <main>
   <section class="hero orange-bg">
 
-    <div class="settings-menu">
+    <div style="
+      text-align:center;
+      color:#fff;
+      font-family:'Inter',sans-serif;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:16px;
+    ">
 
-      <div class="setting-card" onclick="openPanel('cloak')">
-        <h3>App Cloaking</h3>
-        <button>Open</button>
+      <div style="
+        font-size:3rem;
+        font-weight:800;
+        letter-spacing:-0.02em;
+        text-shadow:0 0 25px rgba(255,255,255,0.2);
+      ">
+        Under Construction
       </div>
 
-      <div class="setting-card" onclick="openPanel('links')">
-        <h3>Links</h3>
-        <button>Open</button>
-      </div>
-
-      <div class="setting-card" onclick="openPanel('changelog')">
-        <h3>Changelog</h3>
-        <button>Open</button>
-      </div>
-
-      <div class="setting-card" onclick="openPanel('code')">
-        <h3>Code Panel</h3>
-        <button>Open</button>
+      <div style="
+        font-size:1rem;
+        color:rgba(255,255,255,0.6);
+        letter-spacing:0.05em;
+      ">
+        This page is currently being constructed
       </div>
 
     </div>
@@ -59,22 +64,7 @@
   <p>&copy; 2026 The Carey Network.</p>
 </footer>
 
-<!-- PANEL -->
-<div id="extras-panel" class="extras-overlay">
-  <div class="extras-content">
-
-    <div class="extras-header">
-      <h2 id="panel-title">Panel</h2>
-      <button onclick="closePanel()">✕</button>
-    </div>
-
-    <div id="panel-body" class="extras-body"></div>
-
-  </div>
-</div>
-
 <script src="/js/main.js"></script>
-<script src="/js/extras.js"></script>
 
 </body>
 </html>
