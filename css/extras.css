@@ -195,21 +195,21 @@
 .panel-btn {
   width: 100%;
   padding: 14px;
-  margin: 10px 0;
+  margin: 14px 0 0 0;   /* top only — no bottom margin causing bleed */
   border-radius: 12px;
   border: none;
   background: #e65c00;
   color: #fff;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 0 10px #e65c00;
+  box-shadow: 0 4px 14px rgba(230,92,0,0.6);  /* downward only, no upward bleed */
   transition: 0.25s;
   box-sizing: border-box;
 }
 
 .panel-btn:hover {
   background: #ff6a00;
-  box-shadow: 0 0 20px #fff, 0 0 40px rgba(255,255,255,0.8);
+  box-shadow: 0 4px 20px rgba(255,255,255,0.4), 0 4px 30px rgba(230,92,0,0.7);
   transform: scale(1.02);
 }
 
