@@ -134,11 +134,22 @@ body footer {
   border-radius: 20px;
 }
 
+/* Hero layout when it contains the dashboard */
+.admin-hero {
+  align-items: stretch !important;
+  text-align: left !important;
+}
+
+.admin-hero h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 /* Dashboard wrapper */
 .dashboard {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 30px 25px;
+  padding: 0 0 10px;
 }
 
 @media (max-width: 900px) {
@@ -155,41 +166,40 @@ body footer {
 <main>
   <section class="hero orange-bg admin-hero">
     <h1>Dashboard</h1>
-    <p>Carey Network</p>
+
+    <div class="dashboard">
+
+      <div class="stats">
+        <div class="stat-card">
+          <h3>Online Users</h3>
+          <div id="onlineUsers" class="big">—</div>
+        </div>
+        <div class="stat-card">
+          <h3>Total Site Visits</h3>
+          <div id="totalVisits" class="big">—</div>
+        </div>
+        <div class="stat-card">
+          <h3>Pages Active</h3>
+          <div id="trackedPages" class="big">—</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+
+        <div class="dash-card">
+          <h3>Live Activity</h3>
+          <div id="activityFeed" class="console"></div>
+        </div>
+
+        <div class="dash-card">
+          <h3>Pages Being Viewed</h3>
+          <div id="pagesList" class="pages-list"></div>
+        </div>
+
+      </div>
+
+    </div>
   </section>
-
-  <div class="dashboard">
-
-    <div class="stats">
-      <div class="stat-card">
-        <h3>Online Users</h3>
-        <div id="onlineUsers" class="big">—</div>
-      </div>
-      <div class="stat-card">
-        <h3>Total Site Visits</h3>
-        <div id="totalVisits" class="big">—</div>
-      </div>
-      <div class="stat-card">
-        <h3>Pages Active</h3>
-        <div id="trackedPages" class="big">—</div>
-      </div>
-    </div>
-
-    <div class="dash-grid">
-
-      <div class="dash-card">
-        <h3>Live Activity</h3>
-        <div id="activityFeed" class="console"></div>
-      </div>
-
-      <div class="dash-card">
-        <h3>Pages Being Viewed</h3>
-        <div id="pagesList" class="pages-list"></div>
-      </div>
-
-    </div>
-
-  </div>
 </main>
 
 <script type="module">
