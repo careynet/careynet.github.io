@@ -311,3 +311,116 @@ window.onload = () => {
     });
   }
 };
+
+/* ===== CAREY NETWORK FIREBASE TRACKER ===== */
+
+(async function () {
+
+  try {
+
+    const firebaseApp = await import(
+      "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js"
+    );
+
+    const firebaseDB = await import(
+      "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js"
+    );
+
+    const {
+      initializeApp
+    } = firebaseApp;
+
+    const {
+      getDatabase,
+      ref,
+      set,
+      push,
+      onDisconnect
+    } = firebaseDB;
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0t3RK22ghr2O6WTtz6uFoyP6xUF8iw3A",
+      authDomain: "carey-network-info.firebaseapp.com",
+      databaseURL: "https://carey-network-info-default-rtdb.firebaseio.com",
+      projectId: "carey-network-info",
+      storageBucket: "carey-network-info.firebasestorage.app",
+      messagingSenderId: "1000390544880",
+      appId: "1:1000390544880:web:6c5f85436352b094272135",
+      measurementId: "G-C1C9SJ091R"
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+
+    const sessionId =
+      sessionStorage.getItem("careySessionId")
+      || crypto.randomUUID();
+
+    sessionStorage.setItem(
+      "careySessionId",
+      sessionId
+    );
+
+    const joinedAt = Date.now();
+
+    const onlineRef =
+      ref(
+        db,
+        "onlineUsers/" + sessionId
+      );
+
+    onDisconnect(onlineRef).remove();
+
+    function heartbeat() {
+
+      set(
+        onlineRef,
+        {
+          page: location.pathname,
+          joinedAt,
+          lastSeen: Date.now(),
+          userAgent: navigator.userAgent
+        }
+      );
+
+    }
+
+    heartbeat();
+
+    setInterval(
+      heartbeat,
+      10000
+    );
+
+    const activityRef =
+      push(
+        ref(
+          db,
+          "activity"
+        )
+      );
+
+    set(
+      activityRef,
+      {
+        type: "join",
+        page: location.pathname,
+        timestamp: Date.now()
+      }
+    );
+
+    console.log(
+      "[Carey Analytics] Connected"
+    );
+
+  } catch (err) {
+
+    console.error(
+      "[Carey Analytics]",
+      err
+    );
+
+  }
+
+})();
